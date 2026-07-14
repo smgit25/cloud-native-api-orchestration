@@ -37,7 +37,13 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("Created Order : {}", order);
 
-        log.info("Saving Order: {}", order);
+        log.info(
+                "Saving Order -> id={}, orderId={}, customerId={}, status={}",
+                order.getId(),
+                order.getOrderId(),
+                order.getCustomerId(),
+                order.getStatus()
+        );
 
         Order savedOrder = orderRepository.save(order);
 

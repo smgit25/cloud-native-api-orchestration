@@ -2,7 +2,7 @@ CREATE TABLE order_items (
 
                              id BIGSERIAL PRIMARY KEY,
 
-                             order_id UUID NOT NULL,
+                             order_id BIGINT NOT NULL,
 
                              product_id UUID NOT NULL,
 

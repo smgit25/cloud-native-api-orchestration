@@ -1,6 +1,6 @@
 CREATE TABLE orders (
 
-                        id UUID PRIMARY KEY,
+                        id BIGSERIAL PRIMARY KEY,
 
                         order_id UUID NOT NULL UNIQUE,
 
@@ -8,8 +8,9 @@ CREATE TABLE orders (
 
                         status VARCHAR(50) NOT NULL,
 
+                        total_amount DECIMAL(12,2) NOT NULL,
+
                         created_at TIMESTAMP NOT NULL,
 
                         updated_at TIMESTAMP NOT NULL
-
 );
