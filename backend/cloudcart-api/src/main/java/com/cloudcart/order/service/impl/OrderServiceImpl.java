@@ -4,6 +4,8 @@ import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
 import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.entity.enums.OrderStatus;
+import com.cloudcart.order.mapper.OrderMapper;
+import com.cloudcart.order.repository.OrderRepository;
 import com.cloudcart.order.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -19,22 +21,29 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger log =
             LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    private final OrderMapper orderMapper;
+    private final OrderRepository orderRepository;
+
+    private OrderServiceImpl(OrderMapper orderMapper, OrderRepository orderRepository){
+        this.orderMapper = orderMapper;
+        this.orderRepository = orderRepository;
+    }
+
 
     @Override
     public CreateOrderResponse createOrder(CreateOrderRequest request) {
 
-        Order order = new Order();
-        order.setOrderId(UUID.randomUUID());
-        order.setCustomerId(request.customerId());
-        order.setStatus(OrderStatus.CREATED);
-        order.setCreatedAt(Instant.now());
-        order.setUpdatedAt(Instant.now());
+        Order order = orderMapper.toEntity(request);
 
         log.info("Created Order : {}", order);
 
-        return new CreateOrderResponse(
-                order.getOrderId(),
-                order.getStatus().name()
-        );
+        log.info("Saving Order: {}", order);
+
+        Order savedOrder = orderRepository.save(order);
+
+        log.info("Saved order : {}", savedOrder);
+
+        return orderMapper.toResponse(order);
+
     }
 }
