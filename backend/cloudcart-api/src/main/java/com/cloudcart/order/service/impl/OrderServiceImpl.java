@@ -2,6 +2,7 @@ package com.cloudcart.order.service.impl;
 
 import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
+import com.cloudcart.order.dto.response.GetOrderResponse;
 import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.entity.enums.OrderStatus;
 import com.cloudcart.order.mapper.OrderMapper;
@@ -52,4 +53,14 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toResponse(order);
 
     }
+
+
+    @Override
+    public GetOrderResponse getOrder(UUID orderId) {
+        Order order = orderRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        return orderMapper.toGetOrderResponse(order);
+    }
+
 }

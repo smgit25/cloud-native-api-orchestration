@@ -3,6 +3,8 @@ package com.cloudcart.order.mapper;
 import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.request.OrderItemRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
+import com.cloudcart.order.dto.response.GetOrderResponse;
+import com.cloudcart.order.dto.response.OrderItemResponse;
 import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.entity.OrderItem;
 import com.cloudcart.order.entity.enums.OrderStatus;
@@ -70,6 +72,24 @@ public class OrderMapper {
         return new CreateOrderResponse(
                 order.getOrderId(),
                 order.getStatus().name()
+        );
+    }
+
+    public GetOrderResponse toGetOrderResponse(Order order){
+        List<OrderItemResponse> itemResponses = order.getItems().stream()
+                .map(item->new OrderItemResponse(
+                            item.getProductId(),
+                            item.getQuantity(),
+                            item.getUnitPrice()
+                    )).toList();
+
+        return new GetOrderResponse(
+                order.getOrderId(),
+                order.getCustomerId(),
+                order.getStatus().name(),
+                order.getTotalAmount(),
+                order.getCreatedAt(),
+                itemResponses
         );
     }
 }

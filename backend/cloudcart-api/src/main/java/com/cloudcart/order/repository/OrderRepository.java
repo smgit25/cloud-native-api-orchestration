@@ -1,5 +1,6 @@
 package com.cloudcart.order.repository;
 
+import com.cloudcart.order.dto.response.GetOrderResponse;
 import com.cloudcart.order.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,5 +9,6 @@ import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
 
-    //Optional<Order> findByOrderId(UUID orderId);
+
+    Optional<Order> findByOrderId(UUID orderId);
 }
