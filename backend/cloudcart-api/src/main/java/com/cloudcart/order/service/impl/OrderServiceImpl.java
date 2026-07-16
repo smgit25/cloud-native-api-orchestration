@@ -3,14 +3,14 @@ package com.cloudcart.order.service.impl;
 import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
 import com.cloudcart.order.dto.response.GetOrderResponse;
+import com.cloudcart.order.dto.response.GetOrderSummaryResponse;
 import com.cloudcart.order.entity.Order;
-import com.cloudcart.order.entity.enums.OrderStatus;
 import com.cloudcart.order.mapper.OrderMapper;
 import com.cloudcart.order.repository.OrderRepository;
 import com.cloudcart.order.service.OrderService;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -63,4 +63,10 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.toGetOrderResponse(order);
     }
 
+    @Override
+    public List<GetOrderSummaryResponse> getAllOrders() {
+
+        List<Order> order = orderRepository.findAll();
+        return orderMapper.toSummary(order);
+    }
 }

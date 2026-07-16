@@ -4,6 +4,7 @@ import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.request.OrderItemRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
 import com.cloudcart.order.dto.response.GetOrderResponse;
+import com.cloudcart.order.dto.response.GetOrderSummaryResponse;
 import com.cloudcart.order.dto.response.OrderItemResponse;
 import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.entity.OrderItem;
@@ -91,5 +92,27 @@ public class OrderMapper {
                 order.getCreatedAt(),
                 itemResponses
         );
+    }
+
+    public GetOrderSummaryResponse toSummary(Order order){
+        return new GetOrderSummaryResponse(
+                order.getOrderId(),
+                order.getCustomerId(),
+                order.getStatus().name(),
+                order.getCreatedAt(),
+                order.getTotalAmount()
+        );
+    }
+
+    public List<GetOrderSummaryResponse> toSummary(List<Order> orders) {
+
+        List<GetOrderSummaryResponse> responses = new ArrayList<>();
+
+        for (Order order : orders) {
+
+            responses.add(toSummary(order));
+        }
+
+        return responses;
     }
 }

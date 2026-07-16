@@ -3,6 +3,8 @@ package com.cloudcart.order.controller;
 import com.cloudcart.order.dto.request.CreateOrderRequest;
 import com.cloudcart.order.dto.response.CreateOrderResponse;
 import com.cloudcart.order.dto.response.GetOrderResponse;
+import com.cloudcart.order.dto.response.GetOrderSummaryResponse;
+import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.service.impl.OrderServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -52,23 +55,37 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<?> getOrderbyId(@PathVariable UUID orderId) {
 
-    try{
-        ResponseCookie cookie = ResponseCookie.from("orderId", orderId.toString())
-                .httpOnly(true)
-                .secure(false)      // true in production with HTTPS
-                .path("/")
-                .maxAge(Duration.ofHours(1))
-                .sameSite("Lax")
-                .build();
+        try {
+            ResponseCookie cookie = ResponseCookie.from("orderId", orderId.toString())
+                    .httpOnly(true)
+                    .secure(false)      // true in production with HTTPS
+                    .path("/")
+                    .maxAge(Duration.ofHours(1))
+                    .sameSite("Lax")
+                    .build();
 
-        GetOrderResponse response = orderService.getOrder(orderId);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(response);
-    } catch (Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occured");
+            GetOrderResponse response = orderService.getOrder(orderId);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occured");
 
+        }
     }
 
-    }
+    @GetMapping("/fetchOrders")
+    public ResponseEntity<List<GetOrderSummaryResponse>> getAllOrders(){
+
+        try{
+            return ResponseEntity.ok(
+                    orderService.getAllOrders()
+            );
+        } catch (Exception e){
+                throw e;
+        }
+
+        }
+
+
 }

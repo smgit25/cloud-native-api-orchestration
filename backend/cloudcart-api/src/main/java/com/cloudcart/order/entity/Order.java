@@ -1,6 +1,7 @@
 package com.cloudcart.order.entity;
 
 import com.cloudcart.order.entity.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,5 +47,6 @@ public class Order {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
+    @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>();
 }
