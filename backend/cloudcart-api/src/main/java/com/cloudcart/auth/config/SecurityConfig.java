@@ -1,4 +1,4 @@
-package com.cloudcart.auth.configuration;
+package com.cloudcart.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
