@@ -1,5 +1,7 @@
 package com.cloudcart.auth.service.impl;
 
+import com.cloudcart.auth.dto.LoginRequest;
+import com.cloudcart.auth.dto.LoginResponse;
 import com.cloudcart.auth.dto.RegisterRequest;
 import com.cloudcart.auth.dto.RegisterResponse;
 import com.cloudcart.customer.entity.Customer;
@@ -41,5 +43,20 @@ public class AuthServiceImpl implements AuthService {
         Customer savedCustomer = customerRepository.save(customer);
 
         return customerMapper.toRegisterResponse(savedCustomer);
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+
+        Customer customer = customerRepository.findByEmail(request.email())
+                .orElseThrow(()->new IllegalArgumentException("Invalid email or password"));
+
+        if(!passwordEncoder.matches(request.password(), customer.getPasswordHash())){
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        String token ="dummy-token";
+        return new LoginResponse(customer.getCustomerId(), customer.getFirstName(),
+                customer.getLastName(), customer.getEmail(), token);
     }
 }

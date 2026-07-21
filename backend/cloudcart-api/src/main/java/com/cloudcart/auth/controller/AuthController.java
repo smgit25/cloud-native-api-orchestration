@@ -1,6 +1,7 @@
 package com.cloudcart.auth.controller;
 
 
+import com.cloudcart.auth.dto.LoginRequest;
 import com.cloudcart.auth.dto.RegisterRequest;
 import com.cloudcart.auth.dto.RegisterResponse;
 import com.cloudcart.auth.service.impl.AuthServiceImpl;
@@ -19,7 +20,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class CustomerController {
+public class AuthController {
 
     private final AuthServiceImpl authService;
 
@@ -45,5 +46,16 @@ public class CustomerController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Internal Server Error");
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(authService.login(request));
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
     }
 }
