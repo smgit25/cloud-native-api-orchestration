@@ -8,6 +8,8 @@ import com.cloudcart.order.entity.Order;
 import com.cloudcart.order.mapper.OrderMapper;
 import com.cloudcart.order.repository.OrderRepository;
 import com.cloudcart.order.service.OrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
 
-    private OrderServiceImpl(OrderMapper orderMapper, OrderRepository orderRepository){
+    public OrderServiceImpl(OrderMapper orderMapper, OrderRepository orderRepository){
         this.orderMapper = orderMapper;
         this.orderRepository = orderRepository;
     }
@@ -56,7 +58,10 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Cacheable(value = "orders", key = "#orderId")
     public GetOrderResponse getOrder(UUID orderId) {
+
+        log.info("Fetching order {} from database", orderId);
         Order order = orderRepository.findByOrderId(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 

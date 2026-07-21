@@ -5,8 +5,11 @@ import com.cloudcart.order.dto.response.CreateOrderResponse;
 import com.cloudcart.order.dto.response.GetOrderResponse;
 import com.cloudcart.order.dto.response.GetOrderSummaryResponse;
 import com.cloudcart.order.entity.Order;
+import com.cloudcart.order.service.OrderService;
 import com.cloudcart.order.service.impl.OrderServiceImpl;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -21,7 +24,10 @@ import java.util.UUID;
 @RequestMapping("/api/v1/orders")
 public class OrderController {
 
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
+
+    private static final Logger log =
+            LoggerFactory.getLogger(OrderController.class);
 
     public OrderController(OrderServiceImpl orderService) {
         this.orderService = orderService;
@@ -55,6 +61,7 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<?> getOrderbyId(@PathVariable UUID orderId) {
 
+        log.info("Retrieving orders for id:"+orderId);
         try {
             ResponseCookie cookie = ResponseCookie.from("orderId", orderId.toString())
                     .httpOnly(true)
