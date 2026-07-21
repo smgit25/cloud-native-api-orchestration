@@ -1,10 +1,9 @@
-package com.cloudcart.customer.controller;
+package com.cloudcart.auth.controller;
 
 
-import com.cloudcart.customer.dto.RegisterRequest;
-import com.cloudcart.customer.dto.RegisterResponse;
-import com.cloudcart.customer.service.AuthService;
-import com.cloudcart.customer.service.impl.AuthServiceImpl;
+import com.cloudcart.auth.dto.RegisterRequest;
+import com.cloudcart.auth.dto.RegisterResponse;
+import com.cloudcart.auth.service.impl.AuthServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

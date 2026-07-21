@@ -1,4 +1,4 @@
-package com.cloudcart.customer.dto;
+package com.cloudcart.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

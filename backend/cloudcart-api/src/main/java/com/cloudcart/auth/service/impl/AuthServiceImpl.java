@@ -1,16 +1,13 @@
-package com.cloudcart.customer.service.impl;
+package com.cloudcart.auth.service.impl;
 
-import com.cloudcart.customer.dto.RegisterRequest;
-import com.cloudcart.customer.dto.RegisterResponse;
+import com.cloudcart.auth.dto.RegisterRequest;
+import com.cloudcart.auth.dto.RegisterResponse;
 import com.cloudcart.customer.entity.Customer;
 import com.cloudcart.customer.mapper.CustomerMapper;
 import com.cloudcart.customer.repository.CustomerRepository;
-import com.cloudcart.customer.service.AuthService;
-import com.cloudcart.order.service.impl.OrderServiceImpl;
+import com.cloudcart.auth.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

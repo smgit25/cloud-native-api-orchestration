@@ -1,7 +1,7 @@
 package com.cloudcart.customer.mapper;
 
-import com.cloudcart.customer.dto.RegisterRequest;
-import com.cloudcart.customer.dto.RegisterResponse;
+import com.cloudcart.auth.dto.RegisterRequest;
+import com.cloudcart.auth.dto.RegisterResponse;
 import com.cloudcart.customer.entity.Customer;
 import org.springframework.stereotype.Component;
 

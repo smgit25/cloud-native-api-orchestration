@@ -1,4 +1,4 @@
-package com.cloudcart.customer.dto;
+package com.cloudcart.auth.dto;
 
 import java.time.Instant;
 import java.util.UUID;
