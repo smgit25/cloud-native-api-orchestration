@@ -1,15 +1,14 @@
 package com.cloudcart.auth.service.impl;
 
-import com.cloudcart.auth.dto.LoginRequest;
-import com.cloudcart.auth.dto.LoginResponse;
-import com.cloudcart.auth.dto.RegisterRequest;
-import com.cloudcart.auth.dto.RegisterResponse;
+import com.cloudcart.auth.dto.*;
+import com.cloudcart.auth.jwt.JwtService;
 import com.cloudcart.customer.entity.Customer;
 import com.cloudcart.customer.mapper.CustomerMapper;
 import com.cloudcart.customer.repository.CustomerRepository;
 import com.cloudcart.auth.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +18,15 @@ public class AuthServiceImpl implements AuthService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
     private static final Logger log =
             LoggerFactory.getLogger(AuthServiceImpl.class);
 
-    public AuthServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
 
@@ -46,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request) {
+    public AuthResult login(LoginRequest request) {
 
         Customer customer = customerRepository.findByEmail(request.email())
                 .orElseThrow(()->new IllegalArgumentException("Invalid email or password"));
@@ -55,8 +56,23 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        String token ="dummy-token";
-        return new LoginResponse(customer.getCustomerId(), customer.getFirstName(),
-                customer.getLastName(), customer.getEmail(), token);
+        String token = jwtService.generateToken(customer);
+        log.info(token);
+        ResponseCookie cookie = ResponseCookie.from(
+                "auth-token",
+                token)
+                    .httpOnly(true)
+                .secure(false)      // true when using HTTPS
+                .path("/")
+                .maxAge(3600)
+                .sameSite("Strict")
+                .build();
+        return new AuthResult(token, customer);
+    }
+
+    @Override
+    public void logout() {
+
+//        authService.logout();
     }
 }
